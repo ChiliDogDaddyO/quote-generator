@@ -5,23 +5,20 @@ const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
 const loader = document.getElementById('loader');
 
-// Show loading
-function loading() {
+function showLoadingSpinner() {
   loader.hidden = false;
   quoteContainer.hidden = true;
 }
 
-// Hide Loading
-function complete() {
+function removeLoadingSpinner() {
   if (!loader.hidden) {
     quoteContainer.hidden = false;
     loader.hidden = true;
   }
 }
 
-// Get Quote from API
-async function getQuote() {
-  loading();
+async function getQuoteFromAPI() {
+  showLoadingSpinner();
   // We need to use a Proxy URL to make our API call in order to avoid a CORS error
   const proxyUrl = 'https://calm-brushlands-78577.herokuapp.com/';
   const apiUrl =
@@ -43,10 +40,9 @@ async function getQuote() {
       quoteText.classList.remove('long-quote');
     }
     quoteText.innerText = data.quoteText;
-    // Stop Loader, Show Quote
-    complete();
+    removeLoadingSpinner();
   } catch (error) {
-    getQuote();
+    getQuoteFromAPI();
   }
 }
 
@@ -59,9 +55,8 @@ function tweetQuote() {
 }
 
 // Event listeners
-newQuoteBtn.addEventListener('click', getQuote);
+newQuoteBtn.addEventListener('click', getQuoteFromAPI);
 twitterBtn.addEventListener('click', tweetQuote);
 
 // On Load
-getQuote();
-// loading();
+getQuoteFromAPI();
