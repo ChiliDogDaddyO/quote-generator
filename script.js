@@ -3,9 +3,25 @@ const quoteText = document.getElementById('quote');
 const authorText = document.getElementById('author');
 const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
+const loader = document.getElementById('loader');
+
+// Show loading
+function loading() {
+  loader.hidden = false;
+  quoteContainer.hidden = true;
+}
+
+// Hide Loading
+function complete() {
+  if (!loader.hidden) {
+    quoteContainer.hidden = false;
+    loader.hidden = true;
+  }
+}
 
 // Get Quote from API
 async function getQuote() {
+  loading();
   // We need to use a Proxy URL to make our API call in order to avoid a CORS error
   const proxyUrl = 'https://calm-brushlands-78577.herokuapp.com/';
   const apiUrl =
@@ -27,6 +43,8 @@ async function getQuote() {
       quoteText.classList.remove('long-quote');
     }
     quoteText.innerText = data.quoteText;
+    // Stop Loader, Show Quote
+    complete();
   } catch (error) {
     getQuote();
   }
@@ -43,5 +61,7 @@ function tweetQuote() {
 // Event listeners
 newQuoteBtn.addEventListener('click', getQuote);
 twitterBtn.addEventListener('click', tweetQuote);
+
 // On Load
 getQuote();
+// loading();
